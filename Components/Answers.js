@@ -15,6 +15,16 @@ function Answers(){
         background: isHovering ? "orange" : ""
     }
 
+
+    function hovering(){
+        setIsHovering(true)
+    }
+    
+    function notHovering(){
+        setIsHovering(false)
+    }
+        
+
 }
 
 export default Answers
