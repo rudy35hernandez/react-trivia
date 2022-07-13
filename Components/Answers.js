@@ -11,6 +11,10 @@ function Answers(){
                         props.isSelected ?
                             'selected' : 'answer'
 
+    const styles = {
+        background: isHovering ? "orange" : ""
+    }
+
 }
 
 export default Answers
