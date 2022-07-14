@@ -23,7 +23,20 @@ function Answers(){
     function notHovering(){
         setIsHovering(false)
     }
-        
+    
+    return (
+        <div>
+            <button 
+                className={className}
+                style={styles}
+                onMouseEnter={hovering}
+                onMouseLeave={notHovering}
+                onClick={props.answerSelected}
+            >
+                {props.answer}
+            </button>
+        </div>
+    )
 
 }
 
