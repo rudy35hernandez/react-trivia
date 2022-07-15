@@ -7,7 +7,7 @@ function Questions(props){
 
        return (
             <div className="ques-block">
-                <h2> {props.questions} </h2>
+                <h2>{props.questions}</h2>
             </div>
         )
     }
