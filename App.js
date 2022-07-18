@@ -9,7 +9,12 @@ import Answers from "./Components/Answers.js"
 
 function App(){
     
-    
+    const [startGame, setStartGame] = React.useState(false)
+    const [questions, setQuestions] = React.useState([])
+    const [newGame, setNewGame] = React.useState(false)
+    const [score, setScore] = React.useState(0)
+    const [allChecked, setChecked] = React.useState(false)
+    const [buttonText, setButtonText] = React.useState("Tally score")
 
     
     const apiPage = "https://opentdb.com/api.php?amount=5"
