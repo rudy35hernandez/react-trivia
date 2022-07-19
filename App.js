@@ -19,14 +19,7 @@ function App(){
     
     const apiPage = "https://opentdb.com/api.php?amount=5"
     
-    React.useEffect(()=>{
-        fetch(apiPage)
-            .then(res => res.json())
-            .then(data => {
-               setQuestions(newQuestions(data.results))
-            })
-    }, [newGame])
-    
+  
     // console.log(questions)
     
     function getAnswersArray(elem){
