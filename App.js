@@ -49,7 +49,7 @@ function App(){
             isChecked: false
         })
         
-        return allAnswers
+        return shuffleArray(allAnswers)
     }
     
 
