@@ -74,6 +74,7 @@ function App(){
         return questions
     }
     
+/* Have not incorporated method below into our code */
     
     function escapeHTML(str){
     
