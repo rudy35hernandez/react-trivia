@@ -2,3 +2,30 @@
     box-sizing: border-box;
 }
 
+
+    
+  
+    
+.title-page{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    text-align: center;
+    height: 95vh
+}
+
+.opening-title{
+    font-size: 31.25px;
+    margin-bottom: 0;
+}
+
+
+.start-button{
+    background-color: #4D5B9E;
+    width: 193px;
+    color: #F5F7FB;
+    padding: 10px;
+    border-radius: 15px;
+}
