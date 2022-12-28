@@ -412,6 +412,14 @@ var _Question = __webpack_require__(8);
 
 var _Question2 = _interopRequireDefault(_Question);
 
+var _Answers = __webpack_require__(20);
+
+var _Answers2 = _interopRequireDefault(_Answers);
+
+var _IncorrectAnswers = __webpack_require__(19);
+
+var _IncorrectAnswers2 = _interopRequireDefault(_IncorrectAnswers);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function App() {
@@ -425,8 +433,13 @@ function App() {
         apiReturn = _React$useState4[0],
         setApiReturn = _React$useState4[1];
 
+    var _React$useState5 = _react2.default.useState(false),
+        _React$useState6 = _slicedToArray(_React$useState5, 2),
+        select = _React$useState6[0],
+        setSelect = _React$useState6[1];
+
     _react2.default.useEffect(function () {
-        fetch("https://opentdb.com/api.php?amount=5&category=21&difficulty=easy&type=multiple").then(function (res) {
+        fetch("https://opentdb.com/api.php?amount=5&type=multiple").then(function (res) {
             return res.json();
         }).then(function (data) {
             return setApiReturn(data.results);
@@ -446,15 +459,38 @@ function App() {
         });
     }
 
-    console.log(escapeHTML("In what sport is a &quot;shuttlecock&quot; used?"));
-
-    function apiEl() {
-        return apiReturn.map(function (api) {
-            return _react2.default.createElement(_Question2.default, {
-                question: api.question
-            });
-        });
+    function checkId(id) {
+        console.log(id);
     }
+
+    var questionEl = apiReturn.map(function (api) {
+        //   console.log(api)
+        //    console.log(api.incorrect_answers)
+
+        var incorrectArr = api.incorrect_answers;
+
+        var incorrectObj = incorrectArr.map(function (str, index) {
+            return { id: Math.random() * 100, value: str };
+        });
+
+        // console.log(b);
+
+        return _react2.default.createElement(
+            "div",
+            null,
+            _react2.default.createElement(_Question2.default, {
+                question: api.question
+            }),
+            _react2.default.createElement(_Answers2.default, {
+                answer: api.correct_answer
+            }),
+            _react2.default.createElement(_IncorrectAnswers2.default, {
+                incorrectTest: incorrectObj,
+                checkId: checkId,
+                id: incorrectObj.id
+            })
+        );
+    });
 
     function clickStart() {
         setStartGame(true);
@@ -465,7 +501,7 @@ function App() {
     }) : _react2.default.createElement(
         "div",
         null,
-        apiEl()
+        questionEl
     );
 }
 
@@ -30648,6 +30684,80 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 19 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function IncorrectAnswers(props) {
+
+    console.log(props.incorrectTest);
+
+    var incorrectEl = props.incorrectTest.map(function (el) {
+        return _react2.default.createElement(
+            "p",
+            { onClick: function onClick() {
+                    return props.checkId(el.id);
+                } },
+            " ",
+            el.value,
+            " "
+        );
+    });
+
+    return _react2.default.createElement(
+        "div",
+        null,
+        incorrectEl
+    );
+}
+
+exports.default = IncorrectAnswers;
+
+/***/ }),
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+   value: true
+});
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Answers(props) {
+
+   return _react2.default.createElement(
+      'div',
+      null,
+      _react2.default.createElement(
+         'p',
+         null,
+         props.answer
+      )
+   );
+}
+
+exports.default = Answers;
 
 /***/ })
 /******/ ]);
