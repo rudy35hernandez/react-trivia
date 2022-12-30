@@ -29,3 +29,38 @@
     padding: 10px;
     border-radius: 15px;
 }
+
+/* second page */
+
+.all-answers{
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.correct-answer,
+.mixed-answer{
+    border: solid;
+    border-radius: 10px;
+    
+}
+
+.correct-answer{
+
+}
+
+.incorrect-answers{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.ques-block{
+    margin-bottom: 10px;
+    border: solid 2px
+}
+
+.answers{
+    display: flex;
+    justify-content: space-around
+}

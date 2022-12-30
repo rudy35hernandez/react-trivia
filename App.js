@@ -2,6 +2,7 @@ import React from 'react'
 import Opening from "./Opening.js"
 import Questions from "./Components/Questions.js"
 import {nanoid} from 'nanoid'
+import Answers from "./Components/Answers.js"
 
 
 // import {nanoid} from "nanoid"
@@ -24,8 +25,7 @@ function App(){
             })
     }, [newGame])
     
-    
-   
+    // console.log(questions)
     
     function getAnswersArray(elem){
         let allAnswers = elem.incorrect_answers.map(answer => {
@@ -43,7 +43,7 @@ function App(){
             id: nanoid(),
             isCorrect: true,
             isSelected: false,
-            isChcked: false
+            isChecked: false
         })
         
         return allAnswers
@@ -79,6 +79,18 @@ function App(){
         setStartGame(true)
     }
     
+    function answerSelected(quesId, id){
+       setQuestions(prevQuestions => prevQuestions.map(q => {
+           return q.id === quesId ? {
+               ...q,
+               answers: q.answers.map(answer => {
+                   return {
+                       ...answer, isSelected: answer.id === id ? true : false
+                   }}) 
+           } : q
+       }))
+    }
+
 
   
  
@@ -89,6 +101,20 @@ function App(){
                     questions={el.question}
                     key={el.id}
                 />
+                <div className="answers">
+                    {el.answers.map(item => {
+                        return (
+                            <Answers 
+                                key={item.id}
+                                isCorrect={item.isCorrect}
+                                answer={item.answer}
+                                isSelected={item.isSelected}
+                                answerSelected={() => answerSelected(el.id, item.id)}
+                                id={item.id}
+                            />
+                        )
+                    })}
+                </div>
             </div>
         )
     })

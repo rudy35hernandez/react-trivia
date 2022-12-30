@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -264,9 +264,9 @@ process.umask = function() { return 0; };
 /* WEBPACK VAR INJECTION */(function(process) {
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(13);
+  module.exports = __webpack_require__(14);
 } else {
-  module.exports = __webpack_require__(12);
+  module.exports = __webpack_require__(13);
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
@@ -376,9 +376,9 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 /* WEBPACK VAR INJECTION */(function(process) {
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(17);
+  module.exports = __webpack_require__(18);
 } else {
-  module.exports = __webpack_require__(16);
+  module.exports = __webpack_require__(17);
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
@@ -404,23 +404,15 @@ var _Opening = __webpack_require__(7);
 
 var _Opening2 = _interopRequireDefault(_Opening);
 
-var _GamePage = __webpack_require__(6);
+var _Questions = __webpack_require__(6);
 
-var _GamePage2 = _interopRequireDefault(_GamePage);
+var _Questions2 = _interopRequireDefault(_Questions);
 
-var _Question = __webpack_require__(8);
-
-var _Question2 = _interopRequireDefault(_Question);
-
-var _Answers = __webpack_require__(20);
-
-var _Answers2 = _interopRequireDefault(_Answers);
-
-var _IncorrectAnswers = __webpack_require__(19);
-
-var _IncorrectAnswers2 = _interopRequireDefault(_IncorrectAnswers);
+var _nanoid = __webpack_require__(9);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// import {nanoid} from "nanoid"
 
 function App() {
     var _React$useState = _react2.default.useState(false),
@@ -430,21 +422,66 @@ function App() {
 
     var _React$useState3 = _react2.default.useState([]),
         _React$useState4 = _slicedToArray(_React$useState3, 2),
-        apiReturn = _React$useState4[0],
-        setApiReturn = _React$useState4[1];
+        questions = _React$useState4[0],
+        setQuestions = _React$useState4[1];
 
     var _React$useState5 = _react2.default.useState(false),
         _React$useState6 = _slicedToArray(_React$useState5, 2),
-        select = _React$useState6[0],
-        setSelect = _React$useState6[1];
+        newGame = _React$useState6[0],
+        setNewGame = _React$useState6[1];
+
+    var _React$useState7 = _react2.default.useState(0),
+        _React$useState8 = _slicedToArray(_React$useState7, 2),
+        score = _React$useState8[0],
+        setScore = _React$useState8[1];
+
+    var _React$useState9 = _react2.default.useState(false),
+        _React$useState10 = _slicedToArray(_React$useState9, 2),
+        allChecked = _React$useState10[0],
+        setChecked = _React$useState10[1];
+
+    var apiPage = "https://opentdb.com/api.php?amount=5";
 
     _react2.default.useEffect(function () {
-        fetch("https://opentdb.com/api.php?amount=5&type=multiple").then(function (res) {
+        fetch(apiPage).then(function (res) {
             return res.json();
         }).then(function (data) {
-            return setApiReturn(data.results);
+            setQuestions(newQuestions(data.results));
         });
-    }, []);
+    }, [newGame]);
+
+    function getAnswersArray(elem) {
+        var allAnswers = elem.incorrect_answers.map(function (answer) {
+            return {
+                answer: answer,
+                id: (0, _nanoid.nanoid)(),
+                isCorrect: false,
+                isSelected: false,
+                isChecked: false
+            };
+        });
+
+        allAnswers.push({
+            answer: elem.correct_answer,
+            id: (0, _nanoid.nanoid)(),
+            isCorrect: true,
+            isSelected: false,
+            isChcked: false
+        });
+
+        return allAnswers;
+    }
+
+    function newQuestions(data) {
+        var questions = data.map(function (el) {
+            return {
+                id: (0, _nanoid.nanoid)(),
+                question: el.question,
+                answers: getAnswersArray(el)
+            };
+        });
+        return questions;
+    }
 
     function escapeHTML(str) {
 
@@ -459,42 +496,20 @@ function App() {
         });
     }
 
-    function checkId(id) {
-        console.log(id);
-    }
-
-    var questionEl = apiReturn.map(function (api) {
-        //   console.log(api)
-        //    console.log(api.incorrect_answers)
-
-        var incorrectArr = api.incorrect_answers;
-
-        var incorrectObj = incorrectArr.map(function (str, index) {
-            return { id: Math.random() * 100, value: str };
-        });
-
-        // console.log(b);
-
-        return _react2.default.createElement(
-            "div",
-            null,
-            _react2.default.createElement(_Question2.default, {
-                question: api.question
-            }),
-            _react2.default.createElement(_Answers2.default, {
-                answer: api.correct_answer
-            }),
-            _react2.default.createElement(_IncorrectAnswers2.default, {
-                incorrectTest: incorrectObj,
-                checkId: checkId,
-                id: incorrectObj.id
-            })
-        );
-    });
-
     function clickStart() {
         setStartGame(true);
     }
+
+    var questionEl = questions.map(function (el) {
+        return _react2.default.createElement(
+            "div",
+            { key: (0, _nanoid.nanoid)() },
+            _react2.default.createElement(_Questions2.default, {
+                questions: el.question,
+                key: el.id
+            })
+        );
+    });
 
     return !startGame ? _react2.default.createElement(_Opening2.default, {
         clickStart: clickStart
@@ -546,9 +561,9 @@ if (process.env.NODE_ENV === 'production') {
   // DCE check should happen before ReactDOM bundle executes so that
   // DevTools can report bad minification during injection.
   checkDCE();
-  module.exports = __webpack_require__(11);
+  module.exports = __webpack_require__(12);
 } else {
-  module.exports = __webpack_require__(10);
+  module.exports = __webpack_require__(11);
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
@@ -570,15 +585,22 @@ var _react2 = _interopRequireDefault(_react);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-function GamePage() {
+function Questions(props) {
+
     return _react2.default.createElement(
-        "h1",
-        null,
-        " What just happened "
+        "div",
+        { className: "ques-block" },
+        _react2.default.createElement(
+            "h2",
+            null,
+            " ",
+            props.questions,
+            " "
+        )
     );
 }
 
-exports.default = GamePage;
+exports.default = Questions;
 
 /***/ }),
 /* 7 */
@@ -628,35 +650,6 @@ exports.default = Opening;
 "use strict";
 
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Question(props) {
-    return _react2.default.createElement(
-        'h1',
-        null,
-        ' ',
-        props.question,
-        ' '
-    );
-}
-
-exports.default = Question;
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
@@ -674,7 +667,65 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 _reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById("root"));
 
 /***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "random", function() { return random; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "customRandom", function() { return customRandom; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "customAlphabet", function() { return customAlphabet; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "nanoid", function() { return nanoid; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__url_alphabet_index_js__ = __webpack_require__(10);
+/* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "urlAlphabet", function() { return __WEBPACK_IMPORTED_MODULE_0__url_alphabet_index_js__["a"]; });
+
+let random = bytes => crypto.getRandomValues(new Uint8Array(bytes))
+let customRandom = (alphabet, defaultSize, getRandom) => {
+  let mask = (2 << (Math.log(alphabet.length - 1) / Math.LN2)) - 1
+  let step = -~((1.6 * mask * defaultSize) / alphabet.length)
+  return (size = defaultSize) => {
+    let id = ''
+    while (true) {
+      let bytes = getRandom(step)
+      let j = step
+      while (j--) {
+        id += alphabet[bytes[j] & mask] || ''
+        if (id.length === size) return id
+      }
+    }
+  }
+}
+let customAlphabet = (alphabet, size = 21) =>
+  customRandom(alphabet, size, random)
+let nanoid = (size = 21) =>
+  crypto.getRandomValues(new Uint8Array(size)).reduce((id, byte) => {
+    byte &= 63
+    if (byte < 36) {
+      id += byte.toString(36)
+    } else if (byte < 62) {
+      id += (byte - 26).toString(36).toUpperCase()
+    } else if (byte > 62) {
+      id += '-'
+    } else {
+      id += '_'
+    }
+    return id
+  }, '')
+
+
+/***/ }),
 /* 10 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const urlAlphabet =
+  'useandom-26T198340PX75pxJACKVERYMINDBUSHWOLF_GQZbfghjklqvwyzrict'
+/* harmony export (immutable) */ __webpack_exports__["a"] = urlAlphabet;
+
+
+
+/***/ }),
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -696,7 +747,7 @@ if (process.env.NODE_ENV !== "production") {
 var React = __webpack_require__(1);
 var _assign = __webpack_require__(2);
 var Scheduler = __webpack_require__(3);
-var tracing = __webpack_require__(18);
+var tracing = __webpack_require__(19);
 
 var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
 
@@ -26944,7 +26995,7 @@ exports.version = ReactVersion;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -27248,7 +27299,7 @@ exports.unstable_renderSubtreeIntoContainer=function(a,b,c,d){if(!rk(c))throw Er
 
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29589,7 +29640,7 @@ exports.version = ReactVersion;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29619,7 +29670,7 @@ exports.useLayoutEffect=function(a,b){return S().useLayoutEffect(a,b)};exports.u
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29974,7 +30025,7 @@ exports.unstable_wrap = unstable_wrap;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -29990,7 +30041,7 @@ var b=0;exports.__interactionsRef=null;exports.__subscriberRef=null;exports.unst
 
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30644,7 +30695,7 @@ exports.unstable_wrapCallback = unstable_wrapCallback;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -30671,93 +30722,19 @@ exports.unstable_wrapCallback=function(a){var b=P;return function(){var c=P;P=b;
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(15);
+  module.exports = __webpack_require__(16);
 } else {
-  module.exports = __webpack_require__(14);
+  module.exports = __webpack_require__(15);
 }
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function IncorrectAnswers(props) {
-
-    console.log(props.incorrectTest);
-
-    var incorrectEl = props.incorrectTest.map(function (el) {
-        return _react2.default.createElement(
-            "p",
-            { onClick: function onClick() {
-                    return props.checkId(el.id);
-                } },
-            " ",
-            el.value,
-            " "
-        );
-    });
-
-    return _react2.default.createElement(
-        "div",
-        null,
-        incorrectEl
-    );
-}
-
-exports.default = IncorrectAnswers;
-
-/***/ }),
-/* 20 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-   value: true
-});
-
-var _react = __webpack_require__(1);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function Answers(props) {
-
-   return _react2.default.createElement(
-      'div',
-      null,
-      _react2.default.createElement(
-         'p',
-         null,
-         props.answer
-      )
-   );
-}
-
-exports.default = Answers;
 
 /***/ })
 /******/ ]);
