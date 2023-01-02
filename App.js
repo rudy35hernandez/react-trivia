@@ -14,6 +14,7 @@ function App(){
     const [newGame, setNewGame] = React.useState(false)
     const [score, setScore] = React.useState(0)
     const [allChecked, setChecked] = React.useState(false)
+
     
     const apiPage = "https://opentdb.com/api.php?amount=5"
     
@@ -91,7 +92,22 @@ function App(){
        }))
     }
 
+    // Function below will check if every question has at least one answer with "isSelected" value as true
+    // Next we need to map every answer in a question, if the answer with "isSelected" also has a value of "isCorrect", then we change the answer obj to a 1, 0 if not
+    // Lastly, we can run a reduce method to get total
+    
+    function checkIfAllSelected(arr){
+        const isSelectedCheck = arr.map(ques => ques.answers.map(isSel => isSel.isSelected))
+        const allSelectedCheck = isSelectedCheck.map(item => item.every(item => item === false)).every(item => item === false)
+        
+        return allSelectedCheck
+        
+    }
+    
 
+    function checkScore(arr){
+        console.log(checkIfAllSelected(arr))
+    }
   
  
     const questionEl = questions.map(el => {
@@ -127,7 +143,12 @@ function App(){
         /> 
         :
         <div>
-            {questionEl}
+            <div>
+                {questionEl}
+            </div>
+            <div className="btn-container">
+                <button className="score-btn" onClick={() => checkScore(questions)}> Tally score </button>
+            </div>
         </div>
     )
 }
